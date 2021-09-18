@@ -5,12 +5,6 @@ using namespace std;
 #define INF 123456789
 int main(){
 
-	//10, 12, 20, 30, 25, 40, 32, 31, 35, 50, 60
-	//			  s	  		   	  e
-	
-	//1   3   4   6   6  15   17   20   2   5   5
-	//                             s    e    
-
 	int n;
 	cin>>n;
 	int arr[100005] = {0};

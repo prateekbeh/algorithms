@@ -1,29 +1,24 @@
 #include<bits/stdc++.h>
 
-
-#include <cmath>
-
-inline bool is_integer(float k)
-{
-  return std::floor(k) == k;
-}
-
 using namespace std;
 
-bool prime[1000000 + 5];
+bool prime[1000005];
+int dp[1000005];
 
-void sieve( int n ) {
-
-	for(int p = 2 ; p * p <= n ; p++){
-		prime[p] = true;
-		if(prime[p] == true){
-			for( int x = p * p ; x <= n ; x += p ){
-				prime[x] = false;
-			}
-		}
-	}
+void sieve(int n)
+{
+    memset(prime, true, sizeof(prime));
+ 
+    for (int p = 2; p * p <= n; p++)
+    {
+        if (prime[p] == true)
+        {
+            for (int i = p * p; i <= n; i += p)
+                prime[i] = false;
+        }
+    }
 }
-			
+
 
 bool isPerfectSquare(int x)
 {
@@ -35,35 +30,44 @@ bool isPerfectSquare(int x)
     return ((sr - floor(sr)) == 0);
 }
 
+void count_ans(int n)
+{
+    for (int i = 2; i <= n; i++) {
+ 
+        // Check whether the number
+        // is prime or not
+		int answer = 0;
+        if (prime[i]) {
+ 
+            // Iterate for values of b
+            for (int j = 1;
+                 j * j * j * j <= i;
+                 j++) {
+ 
+                // Check condition for a
+                if (
+                    isPerfectSquare(
+                        i - j * j * j * j)) {
+                    answer++;
+                    break;
+                }
+            }
+        }
+		dp[i] = dp[i-1] + answer;
+    }
+}
+
 int main()
 {
 	int t;
 	cin>>t;
-
-	//use sieve to get all the prime numbers . O( n * log ( log n ))
-
-	memset(prime , true , sizeof(prime));
-	sieve( 1e6 );
-
-	int prime2[1000001];
-	memset(prime2 , 0 , sizeof(prime2));	
-	for(int i = 1 ; i <= 1000000 ; i++){
-		int ans = 0;
-		if(prime[i]){
-			for(int b = 1 ;  b * b * b * b <= i; b++){
-				 if (isPerfectSquare(i - b * b * b * b)) {
-                    	ans++;
-                    	break;
-                 }
-			}
-		}
-		prime2[i] = prime2[i-1] + ans;
-	}
-
+	sieve(1e6 + 5);	
+	count_ans(1e6 + 5);
+	dp[1] = 0;
 	while(t--){
 		int n;
 		cin>>n;
-		cout<<prime2[n]<<endl;
+		cout<<dp[n]<<endl;
 	}
 	return 0;
 }
